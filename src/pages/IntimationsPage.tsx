@@ -80,7 +80,14 @@ export default function IntimationsPage() {
                       <td className="px-4 py-2.5 text-xs text-muted-foreground">{i.responsavel.split(' ').slice(0, 2).join(' ')}</td>
                       <td className="px-4 py-2.5">
                         {i.tarefa_status === 'Criar tarefa' ? (
-                          <Button variant="outline" size="sm" className="h-6 text-[10px] gap-1"><Plus className="h-3 w-3" /> Criar tarefa</Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 text-[10px] gap-1"
+                            onClick={() => { setTaskCnj(i.processo_cnj); setTaskOpen(true); }}
+                          >
+                            <Plus className="h-3 w-3" /> Criar tarefa
+                          </Button>
                         ) : (
                           <StatusBadge status={i.tarefa_status} />
                         )}
