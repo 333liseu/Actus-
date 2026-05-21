@@ -8,9 +8,12 @@ import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { fadeUp } from '@/lib/animations';
+import { CreateTaskDialog } from "@/components/CreateTaskDialog";
 
 export default function IntimationsPage() {
   const [search, setSearch] = useState("");
+  const [taskOpen, setTaskOpen] = useState(false);
+  const [taskCnj, setTaskCnj] = useState<string>("");
   const filtered = mockActusIntimations.filter(m =>
     m.resumo.toLowerCase().includes(search.toLowerCase()) ||
     m.processo_cnj.includes(search) ||
