@@ -39,7 +39,7 @@ export default function TasksPage() {
             <div className="flex gap-2">
               <Link to="/calendar"><Button variant="outline" size="sm">Calendário</Button></Link>
               <Button variant="outline" size="sm" className="gap-2"><Download className="h-3.5 w-3.5" /> Exportar</Button>
-              <Button className="active-scale gap-2"><Plus className="h-4 w-4" /> Nova Tarefa</Button>
+              <Button className="active-scale gap-2" onClick={() => setTaskOpen(true)}><Plus className="h-4 w-4" /> Nova Tarefa</Button>
             </div>
           </motion.div>
 
