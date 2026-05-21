@@ -93,6 +93,7 @@ export default function TasksPage() {
           </motion.div>
         </motion.div>
       </div>
+      <CreateTaskDialog open={taskOpen} onOpenChange={setTaskOpen} />
     </AppLayout>
   );
 }
