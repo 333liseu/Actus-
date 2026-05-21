@@ -8,9 +8,12 @@ import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { fadeUp } from '@/lib/animations';
+import { CreateTaskDialog } from "@/components/CreateTaskDialog";
 
 export default function IntimationsPage() {
   const [search, setSearch] = useState("");
+  const [taskOpen, setTaskOpen] = useState(false);
+  const [taskCnj, setTaskCnj] = useState<string>("");
   const filtered = mockActusIntimations.filter(m =>
     m.resumo.toLowerCase().includes(search.toLowerCase()) ||
     m.processo_cnj.includes(search) ||
@@ -77,7 +80,14 @@ export default function IntimationsPage() {
                       <td className="px-4 py-2.5 text-xs text-muted-foreground">{i.responsavel.split(' ').slice(0, 2).join(' ')}</td>
                       <td className="px-4 py-2.5">
                         {i.tarefa_status === 'Criar tarefa' ? (
-                          <Button variant="outline" size="sm" className="h-6 text-[10px] gap-1"><Plus className="h-3 w-3" /> Criar tarefa</Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 text-[10px] gap-1"
+                            onClick={() => { setTaskCnj(i.processo_cnj); setTaskOpen(true); }}
+                          >
+                            <Plus className="h-3 w-3" /> Criar tarefa
+                          </Button>
                         ) : (
                           <StatusBadge status={i.tarefa_status} />
                         )}
@@ -96,6 +106,11 @@ export default function IntimationsPage() {
           </motion.div>
         </motion.div>
       </div>
+      <CreateTaskDialog
+        open={taskOpen}
+        onOpenChange={setTaskOpen}
+        defaultProcessoCnj={taskCnj}
+      />
     </AppLayout>
   );
 }

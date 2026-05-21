@@ -10,9 +10,11 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { fadeUp } from '@/lib/animations';
+import { CreateTaskDialog } from "@/components/CreateTaskDialog";
 
 export default function TasksPage() {
   const [search, setSearch] = useState("");
+  const [taskOpen, setTaskOpen] = useState(false);
 
   const filterTasks = (status: string) =>
     mockActusTasks.filter(t =>
@@ -37,7 +39,7 @@ export default function TasksPage() {
             <div className="flex gap-2">
               <Link to="/calendar"><Button variant="outline" size="sm">Calendário</Button></Link>
               <Button variant="outline" size="sm" className="gap-2"><Download className="h-3.5 w-3.5" /> Exportar</Button>
-              <Button className="active-scale gap-2"><Plus className="h-4 w-4" /> Nova Tarefa</Button>
+              <Button className="active-scale gap-2" onClick={() => setTaskOpen(true)}><Plus className="h-4 w-4" /> Nova Tarefa</Button>
             </div>
           </motion.div>
 
@@ -91,6 +93,7 @@ export default function TasksPage() {
           </motion.div>
         </motion.div>
       </div>
+      <CreateTaskDialog open={taskOpen} onOpenChange={setTaskOpen} />
     </AppLayout>
   );
 }
