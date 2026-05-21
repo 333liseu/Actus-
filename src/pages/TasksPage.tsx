@@ -10,9 +10,11 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { fadeUp } from '@/lib/animations';
+import { CreateTaskDialog } from "@/components/CreateTaskDialog";
 
 export default function TasksPage() {
   const [search, setSearch] = useState("");
+  const [taskOpen, setTaskOpen] = useState(false);
 
   const filterTasks = (status: string) =>
     mockActusTasks.filter(t =>
