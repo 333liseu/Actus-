@@ -106,6 +106,11 @@ export default function IntimationsPage() {
           </motion.div>
         </motion.div>
       </div>
+      <CreateTaskDialog
+        open={taskOpen}
+        onOpenChange={setTaskOpen}
+        defaultProcessoCnj={taskCnj}
+      />
     </AppLayout>
   );
 }
