@@ -1,20 +1,28 @@
 
+# Exportar preview como HTML navegável
 
-## Problema
+## Objetivo
+Gerar uma versão estática e navegável do app Actus (todas as rotas atuais) empacotada em um único arquivo `.zip` (ou pasta) disponível em `/mnt/documents/` para download.
 
-A logo está embaçada e parece "colada" porque:
-1. O arquivo `actus-logo-clean.png` foi processado por um script Python que pode ter degradado a qualidade
-2. A imagem pode ter fundo opaco (branco/cinza) que não se integra ao fundo escuro da sidebar
-3. O container `h-12 w-12` pode estar escalando a imagem de forma inadequada
+## Abordagem
+Usar o próprio build de produção do Vite com `HashRouter` temporário para que funcione abrindo `index.html` diretamente do disco (sem servidor), e empacotar em zip.
 
-## Plano
+### Passos
+1. Rodar `bun run build` para gerar `dist/`.
+2. Como o app usa `BrowserRouter`, criar um pequeno wrapper de build alternativo:
+   - Copiar `dist/` para `/tmp/actus-preview/`
+   - Criar `dist/404.html` = `index.html` (fallback) e ajustar `base` para `./` no `vite.config.ts` apenas para esse build, OU
+   - Mais simples: trocar temporariamente `BrowserRouter` por `HashRouter` em `src/App.tsx`, buildar, reverter.
+3. Verificar abrindo localmente (curl + headless) que as rotas principais carregam.
+4. Zipar em `/mnt/documents/actus-preview.zip`.
+5. Entregar via `<presentation-artifact>`.
 
-**Arquivo: `src/components/AppSidebar.tsx`**
+## Limitações a sinalizar ao usuário
+- Dados continuam vindo do Supabase em tempo real (precisa de internet); se o usuário quiser snapshot 100% offline, seria outro trabalho (mock estático).
+- Funcionalidades que dependem de auth/Supabase exigirão as mesmas credenciais embutidas no bundle (que já são publishable keys, ok).
+- Rotas usarão `#/` (hash) para funcionar via `file://`.
 
-1. **Usar a imagem original do upload** — trocar o `import` do asset processado pelo arquivo original em `/lovable-uploads/cfa08f7c-8ae0-4e1e-8835-233d8fa03486.png` que está em alta qualidade
-2. **Renderização nítida** — adicionar `style={{ imageRendering: 'auto' }}` e usar tamanho `h-10 w-10` (40px) que é mais natural para ícones
-3. **Sem container extra** — a `<img>` direta, sem `div` wrapper que adiciona complexidade desnecessária
-4. **Sem bordas, sombras ou rings** — apenas a imagem pura integrada ao fundo da sidebar
-
-Resultado: logo nítida, sem aparência de "print colado", integrada naturalmente ao layout escuro.
-
+## Pergunta antes de implementar
+Confirma essas duas decisões?
+- (a) Hash routing (`actus.html#/clientes`) para abrir direto do disco — ok?
+- (b) Manter chamadas reais ao Supabase (online) vs. congelar com dados mock (mais trabalhoso)?
